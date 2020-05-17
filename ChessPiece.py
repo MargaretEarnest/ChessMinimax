@@ -47,7 +47,6 @@ class ChessPiece:
     def findBishop(self, occupied):
         available = []
         for r in range(1, 5):
-            print(str(r // 2) + " " + str(r % 2))
             for n in range(1, 9):
                 x = self.x + (1 if r // 2 == 1 else -1) * n * 50
                 y = self.y + (1 if r % 2 == 1 else -1) * n * 50
@@ -60,7 +59,6 @@ class ChessPiece:
     def findRook(self, occupied):
         available = []
         for r in range(1,5):
-            print(str(0 if r < 3 else r*2 - 7) + " " + str(0 if r > 2 else r*2 - 3))
             for n in range(1, 9):
                 x = self.x + (0 if r < 3 else r*2 - 7) * n * 50
                 y = self.y + (0 if r > 2 else r*2 - 3) * n * 50
@@ -95,7 +93,6 @@ class ChessPiece:
     def findKing(self, occupied):
         available = []
         for n in range(0, 9):
-            print(str(n // 3 - 1) + " " + str(n % 3 - 1))
             x = self.x + (n // 3 - 1) * 50
             y = self.y + (n % 3 - 1) * 50
             if occupied.get((x, y)) is None and x > 0 and y > 0 and x < 400 and y < 400:
@@ -126,7 +123,6 @@ class ChessPiece:
 
     def boxToggle(self, win):
         if not self.boxed:
-            print()
             self.b = Rectangle(Point(self.x - 25, self.y - 25), Point(self.x + 25, self.y + 25))
             self.b.setWidth(8)
             self.b.setOutline("yellow")
