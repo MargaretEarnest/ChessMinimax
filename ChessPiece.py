@@ -39,9 +39,9 @@ class ChessPiece:
         self.t.undraw()
         self.c.undraw()
         if (self.x, self.y) in b.whiteList:
-            temp.whiteList[(self.x, self.y)] = None
+            temp.whiteList.pop((self.x, self.y))
         if (self.x, self.y) in b.blackList:
-            temp.blackList[(self.x, self.y)] = None
+            temp.blackList.pop((self.x, self.y))
         return temp
 
     def findBishop(self, occupied):
@@ -102,7 +102,6 @@ class ChessPiece:
     def findAvailable(self, b: Board):
         available = []
         occupied = dict(b.whiteList)
-        occupied.update(b.blackList)
         if self.name[0] == "P":
             available.extend(self.findPawn(occupied, b))
         elif self.name[0] == "R":

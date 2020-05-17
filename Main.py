@@ -4,8 +4,10 @@ from graphics import *
 from Board import Board
 from ChessPiece import ChessPiece
 
+
 def pieceHere(p, list):
     return p in list and list[p] is not None
+
 
 def main():
     win = GraphWin("Board", 400, 400)
@@ -48,39 +50,40 @@ def main():
     b = Board(whiteList, blackList, 0)
     previous = None
     # b = whiteList.get((25, 75)).remove(b)
-    print(str(b.whiteList.get((175, 25)).findAvailable(b)))
-    print(str(b.whiteList.get((175, 25)).name))
     while b.returnWinner() is None:
         if playerTurn:
             mouse = win.getMouse()
             current = (50 * math.floor(float(mouse.x) / 50) + 25, 50 * math.floor(float(mouse.y) / 50) + 25)
+            print(str(pieceHere(previous, b.whiteList)) + " " + str(not pieceHere(current, b.whiteList)))
+            if previous is not None:
+                print("Valid move: " + str(b.whiteList.get(previous).validMove(b, current)))
             if previous is None and pieceHere(current, b.whiteList):
+                print("Selecting")
                 b.whiteList.get(current).boxToggle(win)
                 previous = current
             elif current is not None and current == previous:
+                print("De-selecting")
                 b.whiteList.get(current).boxToggle(win)
             elif pieceHere(current, b.whiteList) and pieceHere(previous, b.whiteList):
+                print("Changing selection")
                 b.whiteList.get(current).boxToggle(win)
                 b.whiteList.get(previous).boxToggle(win)
                 previous = current
-            elif pieceHere(previous, b.whiteList) and not pieceHere(current, b.whiteList) and b.whiteList.get(previous).validMove(b, current):
-                print(str(current[0]) + " " + str(current[1]))
+            elif pieceHere(previous, b.whiteList) and not pieceHere(current, b.whiteList) and b.whiteList.get(
+                    previous).validMove(b, current):
+                print("Moving piece")
+                if pieceHere(current, b.blackList):
+                    b.blackList.get(current).remove(b)
+                    print(b.blackList)
                 b.whiteList.get(previous).moveTo(win, current[0], current[1])
                 temp = b.whiteList.get(previous)
                 b.whiteList[current] = temp
-                b.whiteList[previous] = None
-                if pieceHere(current, b.blackList) is not None:
-                    b.blackList[current] = None
+                b.whiteList.pop(previous)
+                # issue: can go through any number of black
                 previous = None
-                print(b.whiteList)
                 playerTurn = False
-            # print(str(b.whiteList.get((175, 25)).findAvailable(b)))
-            # print(str(b.whiteList.get((175, 25)).name))
         else:
             print("AI time")
-            # whoops can't move into enemy? I'm dumb I think, assess at not 2 am
-            # king is broken question mark
-            #pawn, queen, bishop, knight, and rook seem fine
             # time.sleep(5)
             # break
             playerTurn = not playerTurn
